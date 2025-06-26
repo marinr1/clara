@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clara: Trustworthy AI, Powered by a Reusable Framework</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        .section-card { background-color: white; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; overflow: hidden; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+        pre code { font-family: 'Source Code Pro', monospace; font-size: 0.8rem; }
+        .code-block { background-color: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto;}
+        .code-block-title { font-family: 'Source Code Pro', monospace; font-weight: 600; padding-bottom: 0.5rem; margin-bottom: 0.5rem; border-bottom: 1px solid #475569; }
+
+        /* Phone Mockup Styles */
+        .phone-screen { scrollbar-width: none; -ms-overflow-style: none; }
+        .phone-screen::-webkit-scrollbar { display: none; }
+        .chat-bubble { opacity: 0; animation: fade-in-up 0.5s forwards; }
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .thinking-item { transition: all 0.5s; }
+        .thinking-item.completed { color: #16a34a; opacity: 0.8; }
+        .thinking-item.completed .spinner { display: none; }
+        .thinking-item.completed .check { display: inline-block; }
+        .thinking-item .check { display: none; }
+        
+        /* Universal Architecture Styles */
+        .uni-arch-container { background: #f8fafc; padding: 1.5rem; border-radius: 1rem; border: 1px solid #e2e8f0; }
+        .uni-arch-layer { border: 2px dashed #94a3b8; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; }
+        .uni-arch-layer-title { text-align: center; font-size: 1rem; font-weight: 700; color: #475569; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .uni-arch-use-case { background: #e0e7ff; border: 1px solid #a5b4fc; color: #3730a3; padding: 1rem; border-radius: 0.5rem; text-align: center; font-weight: 600; }
+        .uni-arch-component-title { font-weight: 600; color: #1e293b; font-size: 0.9rem; }
+        .uni-arch-component-desc { font-size: 0.8rem; color: #475569; margin-top: 0.25rem; }
+        .uni-arch-arrow { font-size: 2rem; color: #64748b; text-align: center; margin: 0.5rem 0; }
+        .uni-arch-tool { background: #dcfce7; border-color: #86efac; color: #166534; }
+        .uni-arch-label { font-size: 0.8rem; font-weight: 500; color: #475569; text-align: center; margin-top: 0.5rem; }
+        
+        /* Challenges & Artifacts Section Styles */
+        .challenge-card { background: #f8fafc; border-left: 4px solid; border-radius: 0.5rem; padding: 1.5rem; }
+        .challenge-title { font-weight: 700; color: #1e293b; }
+        .solution-list { margin-top: 0.75rem; padding-left: 1rem; list-style: none; }
+        .solution-list li { position: relative; padding-left: 1.25rem; font-size: 0.9rem; color: #475569; margin-bottom: 0.5rem; }
+        .solution-list li::before { content: '✓'; position: absolute; left: 0; color: #16a34a; font-weight: 700; }
+        .artifact-card {
+            background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 0.75rem;
+            opacity: 0; animation: fade-in-up 0.5s forwards;
+        }
+        .artifact-title { font-weight: 600; color: #334155; margin-bottom: 0.5rem; font-size: 0.9rem; padding: 0.75rem 1rem 0; }
+        .artifact-card.risky { border-left: 4px solid #ef4444; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 10C27.9086 10 10 27.9086 10 50C10 72.0914 27.9086 90 50 90V70C38.9543 70 30 61.0457 30 50C30 38.9543 38.9543 30 50 30C61.0457 30 70 38.9543 70 50C70 61.0457 61.0457 70 50 70V90C72.0914 90 90 72.0914 90 50C90 27.9086 72.0914 10 50 10Z" fill="url(#paint0_linear_logo)"/><defs><linearGradient id="paint0_linear_logo" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs></svg>
+                    </div>
+                    <span class="text-2xl font-bold text-slate-800 ml-2">Clara</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#problem" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">The Problem</a>
+                        <a href="#solution" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Our Solution</a>
+                        <a href="#journey" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Clara Demo</a>
+                        <a href="#framework" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">How It Works</a>
+                        <a href="#challenges" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Enterprise Ready</a>
+                        <a href="#roadmap-team" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Roadmap & Team</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <section id="hero" class="text-center py-20">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight">
+                <span class="block">Clara: Trustworthy AI,</span>
+                <span class="block text-blue-600">Powered by the Accountability Framework.</span>
+            </h1>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">
+                We present **Clara**, a financial wellness agent whose safety and reliability are made possible by our internal **Accountability Framework**—a production-ready architecture for building and scaling governable agentic AI.
+            </p>
+        </section>
+
+        <section id="problem" class="py-16">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900">The Enterprise AI Reliability Crisis</h2>
+                <p class="mt-2 text-lg text-slate-600 max-w-3xl mx-auto">Generative AI is a non-deterministic 'oracle.' For a creative agency, this is a feature. For a regulated financial institution, this unpredictability creates unacceptable risk, creating a massive gap between an impressive demo and a responsible, production-ready system.</p>
+            </div>
+        </section>
+
+        <section id="solution" class="py-16">
+             <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900">Our Solution: An Architecture for Accountability</h2>
+                <p class="mt-2 text-lg text-slate-600 max-w-3xl mx-auto">Clara's safety and reliability are not an accident. They are the result of its engine: **The Accountability Framework**, a reusable architecture that transforms unpredictable agents into governable business assets.</p>
+            </div>
+             <div class="section-card mt-12 p-8">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-red-600">The Risk: Ungoverned Autonomy</h4>
+                        <p class="text-sm text-slate-600">Standard agents can fail on complex goals because a simple prompt is a brittle instruction, leading to incorrect or non-compliant outcomes.</p>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-blue-600">The Framework: Stateful Contracts & Guardrails</h4>
+                        <p class="text-sm text-slate-600">Our framework uses a persistent `Contract` as an auditable "job ticket" and wraps agent execution in proactive guardrails and human oversight.</p>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-green-600">The Result: Predictability & Trust</h4>
+                        <p class="text-sm text-slate-600">This transforms a probabilistic guess into a verifiable process, enabling trust and ensuring a complete audit trail for compliance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="journey" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900">See the Framework in Action: The Clara User Journey</h2>
+                <p class="mt-2 text-lg text-slate-600 max-w-3xl mx-auto">As the conversation unfolds on the left, see the real-time backend process on the right. This shows how our framework provides transparent governance at every step.</p>
+            </div>
+            <div class="section-card p-4 md:p-8">
+                <div id="journey-stepper" class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/3 flex flex-col items-center">
+                        <div class="w-full max-w-sm mx-auto bg-black rounded-3xl p-3 shadow-2xl border-4 border-slate-800">
+                            <div class="aspect-[9/19.5] bg-white rounded-xl overflow-hidden relative">
+                                <div id="phone-screen" class="absolute top-0 left-0 w-full h-full phone-screen overflow-y-auto p-4 flex flex-col-reverse">
+                                    <div id="journey-chat-container" class="space-y-4 w-full"></div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 w-full bg-white/80 backdrop-blur-sm p-2 border-t border-slate-200">
+                                   <div id="journey-input-container" class="flex items-center space-x-2">
+                                        <span class="text-slate-400 text-xl">🎙️</span>
+                                        <input type="text" placeholder="Start with a goal..." class="flex-grow bg-slate-200 rounded-full px-4 py-2 text-sm" disabled>
+                                        <span class="text-slate-400 text-xl">🖼️</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-2/3 flex flex-col justify-start">
+                        <div id="journey-text-container" class="space-y-4 min-h-[120px]"></div>
+                        <div id="live-artifacts-container" class="mt-4 space-y-4"></div>
+                         <div class="mt-8 flex items-center space-x-4">
+                            <button id="journey-prev" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-md font-semibold hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition">Prev</button>
+                            <button id="journey-next" class="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition">Next</button>
+                            <div class="flex-grow text-right text-sm text-slate-500 font-medium">
+                                Step <span id="journey-current-step">1</span> of <span id="journey-total-steps">6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="framework" class="py-16 space-y-12">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900">How the Framework Works</h2>
+                <p class="mt-2 text-lg text-slate-600 max-w-3xl mx-auto">Our framework is a disciplined, repeatable system for orchestrating agents, tools, and human oversight in a way that is both powerful and auditable.</p>
+            </div>
+            
+            <div class="section-card p-6 md:p-8">
+                 <h3 class="text-xl font-bold text-slate-900 mb-6 text-center">The Anatomy of a Governed Task</h3>
+                 <div class="space-y-8">
+                    <div>
+                        <h4 class="font-semibold text-slate-800 text-lg">Agents vs. Tools: A Critical Distinction</h4>
+                        <p class="text-sm text-slate-600 mt-2">In our framework, **Tools** are simple functions that perform one action (e.g., call an API). **Agents** are sophisticated, stateful services that can use *multiple tools in a sequence* to complete a complex task. The `VisionPropertyAgent`, for example, is an agent because it first uses a `Vision` tool and then a `Database` tool to fulfill its goal.</p>
+                    </div>
+                    <hr/>
+                    <div class="grid md:grid-cols-2 gap-6 items-start">
+                        <div class="pt-2">
+                            <h4 class="font-semibold text-slate-800">1. A Plan is Declared via a `Template`</h4>
+                            <p class="text-sm text-slate-600 mt-1">Every task begins with a `Solution Template`. This human-readable YAML file is a **declarative plan**, not a prompt. It tells the `Orchestrator` the required steps and the type of agent needed for each step.</p>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-title">home_purchase_template.yaml</div>
+                            <pre><code>execution_plan:
+  - step: 1
+    name: "Analyze Property and Estimate Value"
+    required_agent_type: "vision_property_agent"
+...</code></pre>
+                        </div>
+                    </div>
+                     <div class="grid md:grid-cols-2 gap-6 items-start">
+                        <div class="pt-2">
+                             <h4 class="font-semibold text-slate-800">2. An Agent is Assigned via its `Agent Card`</h4>
+                             <p class="text-sm text-slate-600 mt-1">The `Orchestrator` consults the `Agent Registry`, a directory of discoverable **`Agent Cards`**. It finds an agent that matches the `required_agent_type`. The card describes the agent's capabilities and address.</p>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-title">vision_agent.card.yaml</div>
+                            <pre><code>name: "Vision & Property Agent"
+agent_type: "vision_property_agent"
+a2a_endpoint: "http://vision-agent-svc/run"
+description: "Analyzes property photos..."</code></pre>
+                        </div>
+                    </div>
+                     <div class="grid md:grid-cols-2 gap-6 items-start">
+                         <div class="pt-2">
+                            <h4 class="font-semibold text-slate-800">3. A Task is Sent via the `A2A Protocol`</h4>
+                            <p class="text-sm text-slate-600 mt-1">The `Orchestrator` sends the job to the agent's endpoint using the open **A2A (Agent-to-Agent) Protocol**. This ensures all communication is structured, standardized, and interoperable.</p>
+                        </div>
+                        <div class="code-block">
+                             <div class="code-block-title">A2A Protocol Message (JSON)</div>
+                            <pre><code>{
+  "jsonrpc": "2.0",
+  "method": "run",
+  "params": { "image_url": "..." }
+}</code></pre>
+                        </div>
+                    </div>
+                     <div class="grid md:grid-cols-2 gap-6 items-start">
+                        <div class="pt-2">
+                            <h4 class="font-semibold text-slate-800">4. The `Contract` is Immutably Recorded</h4>
+                            <p class="text-sm text-slate-600 mt-1">The result is validated and recorded in the `Contract` object. The `Contracts DB` functions as an **append-only ledger**; every update creates a new, versioned copy of the `Contract`, ensuring a perfect, unchangeable audit trail.</p>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-title">Contract Object (in Contracts DB)</div>
+                            <pre><code>{
+  "contract_id": "c-a7b3c9f0",
+  "status": "COMPLETED_STEP_1",
+  "results": { "estimated_value": 850000 },
+  "version": 2
+}</code></pre>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+            
+            <div class="section-card mt-12 p-6 md:p-8">
+                 <h3 class="text-xl font-bold text-slate-900 mb-4 text-center">Architecture: A Reusable Governance Platform</h3>
+                 <p class="text-center text-slate-600 mb-6">The same central framework can power any number of different agentic applications, ensuring consistent governance, security, and auditability across the enterprise.</p>
+                 <div class="uni-arch-container">
+                    <div class="uni-arch-layer">
+                        <h3 class="uni-arch-layer-title">Layer 1: Agentic Use Cases (Business Logic)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="uni-arch-use-case shadow-lg">Clara Wellness Agent</div>
+                            <div class="uni-arch-use-case">KYC Review Agent</div>
+                            <div class="uni-arch-use-case">Fraud Analyst Agent</div>
+                        </div>
+                        <p class="uni-arch-label">New business problems become new agents & templates, not new architectures.</p>
+                    </div>
+                    <div class="uni-arch-arrow">↓</div>
+                    <div class="uni-arch-layer border-blue-600 bg-blue-50/30">
+                        <h3 class="uni-arch-layer-title !text-blue-700">Layer 2: The Accountability Framework (Governance)</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="uni-arch-component"><h4 class="uni-arch-component-title">Contract Orchestrator</h4></div>
+                            <div class="uni-arch-component"><h4 class="uni-arch-component-title">Template & Agent Registry <span class="block text-xs font-normal text-blue-700">(hosting Agent Cards)</span></h4></div>
+                            <div class="uni-arch-component"><h4 class="uni-arch-component-title">Validation & Guardrails</h4></div>
+                            <div class="uni-arch-component"><h4 class="uni-arch-component-title">HITL Gateway</h4></div>
+                        </div>
+                    </div>
+                    <div class="uni-arch-arrow">↓</div>
+                    <div class="uni-arch-layer">
+                         <h3 class="uni-arch-layer-title">Layer 3: Shared Capabilities & Tools (Technology)</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="uni-arch-component uni-arch-tool"><h4 class="uni-arch-component-title">Orchestration</h4><p class="uni-arch-component-desc">e.g., LangGraph</p></div>
+                             <div class="uni-arch-component uni-arch-tool"><h4 class="uni-arch-component-title">Observability</h4><p class="uni-arch-component-desc">e.g., Langfuse</p></div>
+                             <div class="uni-arch-component uni-arch-tool"><h4 class="uni-arch-component-title">Agent Communication</h4><p class="uni-arch-component-desc">A2A Protocol</p></div>
+                             <div class="uni-arch-component uni-arch-tool"><h4 class="uni-arch-component-title">Secure Tool Use</h4><p class="uni-arch-component-desc">MCP Standard</p></div>
+                        </div>
+                        <p class="uni-arch-label">The framework integrates with open standards to ensure future-proofing and avoid vendor lock-in.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="challenges" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900">Enterprise-Ready by Design</h2>
+                <p class="mt-2 text-lg text-slate-600 max-w-3xl mx-auto">A successful platform isn't just technically sound; it's operationally viable. We designed the framework to solve the real-world organizational and economic challenges of deploying AI in a bank.</p>
+            </div>
+            <div class="section-card p-8">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="challenge-card border-purple-500">
+                        <h3 class="challenge-title">The Challenge: Organizational Inertia</h3>
+                         <ul class="solution-list">
+                            <li>**Phased Adoption:** Pilot the framework with a single, high-value use case (like Clara) to prove its worth and build internal allies before a broad rollout.</li>
+                            <li>**Align with Existing Governance:** Frame `Solution Templates` as "digitized policy" that existing Risk and Compliance teams can review and approve.</li>
+                        </ul>
+                    </div>
+                     <div class="challenge-card border-red-500">
+                        <h3 class="challenge-title">The Challenge: The Explainability Gap</h3>
+                         <ul class="solution-list">
+                            <li>**Chain-of-Thought Logging:** Mandate that agents log their reasoning process, providing a human-readable rationale for every action in the audit trail.</li>
+                            <li>**Structured Justifications:** The `LLM-as-a-Judge` must output not just a verdict, but a justification citing the specific rule it applied.</li>
+                        </ul>
+                    </div>
+                    <div class="challenge-card border-amber-500">
+                        <h3 class="challenge-title">The Challenge: Economic Viability</h3>
+                         <ul class="solution-list">
+                            <li>**Tiered Intelligence:** Use a cost-aware orchestrator to route tasks to the most efficient model—reserving powerful models for high-value steps.</li>
+                            <li>**Focus on Net Value:** Frame the ROI by comparing the cost-per-decision to the value it creates (e.g., preventing fraud vs. a $5 agent cost).</li>
+                        </ul>
+                    </div>
+                     <div class="challenge-card border-teal-500">
+                        <h3 class="challenge-title">The Challenge: The HITL Bottleneck</h3>
+                         <ul class="solution-list">
+                            <li>**HITL as a Calibration Source:** Use human decisions to continuously fine-tune the automated `Guardrail` and `Judge` agents, *reducing the need for human review over time*.</li>
+                            <li>**Confidence-Based Sampling:** Use confidence scores to intelligently sample cases for human review, ensuring quality control without a massive bottleneck.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap-team" class="py-16 space-y-12">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900">Our Plan & Our Team</h2>
+                <p class="mt-2 text-lg text-slate-600 max-w-3xl mx-auto">We have a pragmatic plan to bring this vision to life and the team to execute it.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="section-card p-8">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4">A Credible Path to Production</h3>
+                    <ol class="relative border-l border-slate-200">                  
+                        <li class="mb-10 ml-4">
+                            <div class="absolute w-3 h-3 bg-blue-600 rounded-full mt-1.5 -left-1.5 border border-white"></div>
+                            <h4 class="text-lg font-semibold text-slate-900">Hackathon MVP (Clara)</h4>
+                            <p class="text-sm font-normal text-slate-500">Prove the Framework by building a single, high-quality agentic application demonstrating the full, accountable Contract Lifecycle.</p>
+                        </li>
+                        <li class="mb-10 ml-4">
+                            <div class="absolute w-3 h-3 bg-slate-300 rounded-full mt-1.5 -left-1.5 border border-white"></div>
+                            <h4 class="text-lg font-semibold text-slate-900">Phase 2: Internal Pilot</h4>
+                            <p class="text-sm font-normal text-slate-500">Apply the Framework to a high-value internal banking process (e.g., KYC or fraud analysis) to quantify efficiency gains and compliance adherence.</p>
+                        </li>
+                        <li class="ml-4">
+                            <div class="absolute w-3 h-3 bg-slate-300 rounded-full mt-1.5 -left-1.5 border border-white"></div>
+                            <h4 class="text-lg font-semibold text-slate-900">Phase 3: Enterprise Platform</h4>
+                            <p class="text-sm font-normal text-slate-500">Package the Accountability Framework as a reusable internal platform to accelerate safe and consistent AI adoption across the enterprise.</p>
+                        </li>
+                    </ol>
+                </div>
+                <div class="section-card p-8">
+                     <h3 class="text-xl font-bold text-slate-900 mb-4">The Team</h3>
+                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                         <div class="text-center"><h4 class="mt-2 font-semibold text-slate-800">Roger Marin</h4><p class="text-xs text-slate-500">Roger.MarinLeal@anz.com</p></div>
+                         <div class="text-center"><h4 class="mt-2 font-semibold text-slate-800">Amber Lu</h4><p class="text-xs text-slate-500">amber.lu@anz.com</p></div>
+                         <div class="text-center"><h4 class="mt-2 font-semibold text-slate-800">Yan Liu</h4><p class="text-xs text-slate-500">Yan.Liu2@anz.com</p></div>
+                         <div class="text-center"><h4 class="mt-2 font-semibold text-slate-800">Terry Zhou</h4><p class="text-xs text-slate-500">Terry.Zhou@anz.com</p></div>
+                         <div class="text-center"><h4 class="mt-2 font-semibold text-slate-800">sandeep Anumalasetti</h4><p class="text-xs text-slate-500">sandeep.Anumalasetti@anz.com</p></div>
+                         <div class="text-center"><h4 class="mt-2 font-semibold text-slate-800">Nini Cui</h4><p class="text-xs text-slate-500">nini.cui@anz.com</p></div>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+             <h2 class="text-3xl font-bold tracking-tight text-slate-900">Innovating with Accountability</h2>
+             <p class="mt-2 text-lg text-slate-600 max-w-3xl mx-auto">This isn't just a new agent. This is a blueprint for the future of enterprise AI.</p>
+        </div>
+    </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const syntaxHighlight = (json) => {
+            if (typeof json != 'string') { json = JSON.stringify(json, null, 2); }
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'text-green-400'; // number
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'text-sky-400'; // key
+                    } else {
+                        cls = 'text-amber-400'; // string
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'text-fuchsia-400'; // boolean
+                } else if (/null/.test(match)) {
+                    cls = 'text-fuchsia-400';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        };
+
+        const createStepper = (config) => {
+            let currentIndex = 0;
+            const elements = config.elements;
+            const render = () => {
+                config.renderFn(config.data[currentIndex], currentIndex);
+                if (elements.currentStepSpan) elements.currentStepSpan.textContent = currentIndex + 1;
+                if (elements.prevBtn) elements.prevBtn.disabled = currentIndex === 0;
+                if (elements.nextBtn) elements.nextBtn.disabled = currentIndex === config.data.length - 1;
+            };
+            const next = () => { if (currentIndex < config.data.length - 1) { currentIndex++; render(); } };
+            const prev = () => { if (currentIndex > 0) { currentIndex--; render(); } };
+            if (elements.prevBtn) elements.prevBtn.addEventListener('click', prev);
+            if (elements.nextBtn) elements.nextBtn.addEventListener('click', next);
+            if (elements.totalStepsSpan) elements.totalStepsSpan.textContent = config.data.length;
+            render();
+        };
+        
+        // REVISED: This data structure now includes the rich 'artifacts' for each step
+        const journeyData = [
+            { 
+                stage: 'start', 
+                text: { title: '1. The User Request', description: "The journey begins with a user's goal. Their unstructured request is captured and sent to the framework's API Gateway to initiate a new `Contract`." },
+                artifacts: [
+                    { type: 'component', title: 'User Device (Clara UI)', desc: 'Captures user input and initiates the task.' },
+                    { type: 'component', title: 'API Gateway', desc: 'Receives the request, authenticates, and creates the initial Contract.' },
+                ]
+            },
+            { 
+                stage: 'consent', 
+                text: { title: '2. Explicit Consent', description: "The Orchestrator determines that user consent is required for financial data access. The task is routed back to Clara to ask for permission, and the pending status is logged." },
+                artifacts: [
+                    { type: 'component', title: 'Orchestrator', desc: 'Determines consent is required based on the initial plan.' },
+                    { type: 'database', title: 'Contracts DB (Ledger)', content: { contract_id: "c-a7b3c9f0", status: "PENDING_CONSENT", version: 1 } }
+                ]
+            },
+            { 
+                stage: 'planning', 
+                text: { title: '3. Transparent Planning', description: "With consent granted, the Orchestrator uses a `Solution Template` to create a detailed, auditable plan for the multi-agent task." },
+                artifacts: [
+                    { type: 'code', lang: 'yaml', title: 'Solution Template', content: 'execution_plan:\n  - step: 1\n    name: "Analyze Property"\n    required_agent_type: "vision_agent"\n  - step: 2\n    name: "Fetch Financials"\n    required_agent_type: "finance_agent"' },
+                    { type: 'component', title: 'Planner Agent', desc: 'Constructs the execution plan based on the template and user goal.' },
+                ]
+            },
+            { 
+                stage: 'report', 
+                text: { title: '4. Multi-Agent Execution', description: "The Orchestrator dispatches tasks to specialized agents based on their `Agent Cards`. The results are validated and immutably logged in the `Contract`." },
+                artifacts: [
+                     { type: 'code', lang: 'yaml', title: 'Agent Card (Discovery)', content: 'name: VisionPropertyAgent\nagent_type: vision_agent\na2a_endpoint: ...' },
+                     { type: 'code', lang: 'json', title: 'A2A Message (Tasking)', content: '{\n  "jsonrpc": "2.0",\n  "method": "run", ...\n}' },
+                     { type: 'database', title: 'Contracts DB (Result)', content: { status: "COMPLETED", version: 3, results: { estimated_value: 850000, total_savings: 45000 } } }
+                ]
+            },
+            { 
+                stage: 're-planning', 
+                text: { title: '5. Adaptive Re-Planning', description: "The user's new constraint triggers the Orchestrator to adapt. It modifies the Contract and re-runs the necessary parts of the plan." },
+                 artifacts: [
+                    { type: 'component', title: 'Orchestrator', desc: 'Receives new input and modifies the execution plan.' },
+                    { type: 'database', title: 'Contracts DB (New Version)', content: { status: "RE_PLANNING", version: 4, user_input: { constraints: "must have a garden" } } }
+                ]
+            },
+            { 
+                stage: 'escalation', 
+                text: { title: '6. The HITL Safety Net', description: "The user's sentiment is detected by a `Guardrail Agent`. The workflow is automatically paused and escalated to a human expert via the `HITL Gateway`." },
+                artifacts: [
+                    { type: 'component', title: 'Guardrail Agent', desc: 'Monitors communication for policy violations or emotional distress.' },
+                    { type: 'component', title: 'HITL Gateway', desc: 'Routes the case to a human review queue for empathetic intervention.', risky: true },
+                ]
+            },
+        ];
+        
+        const journeyStepperElements = {
+            chat: document.getElementById('journey-chat-container'),
+            text: document.getElementById('journey-text-container'),
+            artifacts: document.getElementById('live-artifacts-container'),
+            prevBtn: document.getElementById('journey-prev'),
+            nextBtn: document.getElementById('journey-next'),
+            currentStepSpan: document.getElementById('journey-current-step'),
+            totalStepsSpan: document.getElementById('journey-total-steps'),
+        };
+        const phoneScreenEl = document.getElementById('phone-screen');
+
+        // FIXED: Restored the animateChecklist function
+        const animateChecklist = (elementId, steps) => {
+            const checklistEl = document.getElementById(elementId);
+            if(checklistEl) {
+                checklistEl.innerHTML = '';
+                let stepIndex = 0;
+                const intervalId = setInterval(() => {
+                    if(stepIndex < steps.length) {
+                        const item = document.createElement('div');
+                        item.className = 'thinking-item opacity-50';
+                        item.innerHTML = `<span class="spinner inline-block animate-spin w-3 h-3 border-2 border-slate-400 border-t-transparent rounded-full mr-1"></span><span class="check text-green-500 font-bold hidden">✓</span> ${steps[stepIndex]}`;
+                        checklistEl.appendChild(item);
+                        setTimeout(() => item.classList.remove('opacity-50'), 50);
+                        
+                        if(stepIndex > 0) {
+                            const prevItem = checklistEl.children[stepIndex-1];
+                            if(prevItem) prevItem.classList.add('completed');
+                        }
+                        stepIndex++;
+                    } else {
+                            const lastItem = checklistEl.children[stepIndex-1];
+                            if(lastItem) lastItem.classList.add('completed');
+                            clearInterval(intervalId);
+                    }
+                }, 600);
+            }
+        };
+
+        if(journeyStepperElements.chat) {
+            createStepper({
+                data: journeyData,
+                elements: journeyStepperElements,
+                renderFn: (stepData, index) => {
+                    const { stage, text, artifacts } = stepData;
+                    
+                    journeyStepperElements.text.innerHTML = `<div class="transition-opacity duration-500 opacity-100"><h3 class="text-2xl font-bold text-slate-900">${text.title}</h3><p class="mt-2 text-slate-600">${text.description}</p></div>`;
+                    
+                    let artifactsHtml = '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">';
+                    (artifacts || []).forEach((artifact, i) => {
+                        let contentHtml = '';
+                        if (artifact.type === 'component') {
+                            contentHtml = `<div class="p-4"><div class="artifact-title">${artifact.title}</div><p class="artifact-desc">${artifact.desc}</p></div>`;
+                        } else if (artifact.type === 'database') {
+                             contentHtml = `<div class="artifact-title">${artifact.title}</div><div class="code-block"><pre><code>${syntaxHighlight(artifact.content)}</code></pre></div>`;
+                        } else if (artifact.type === 'code') {
+                             contentHtml = `<div class="code-block"><div class="code-block-title">${artifact.title}</div><pre><code class="${artifact.lang}">${artifact.content}</code></pre></div>`;
+                        }
+                        
+                        artifactsHtml += `<div class="artifact-card ${artifact.risky ? 'risky' : ''}" style="animation-delay: ${i*100}ms">${contentHtml}</div>`;
+                    });
+                    artifactsHtml += '</div>';
+                    journeyStepperElements.artifacts.innerHTML = artifactsHtml;
+
+                    const bubbles = [
+                        `<div class="flex justify-end"><div class="chat-bubble bg-blue-600 text-white p-3 rounded-2xl max-w-xs text-sm">Hey Clara... is something like this even possible for us?</div></div><div class="flex justify-end"><img src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg" alt="User uploaded house" class="rounded-lg mt-2 shadow-md w-48"></div>`,
+                        `<div class="flex justify-start mt-4"><div class="chat-bubble bg-slate-200 p-3 rounded-2xl max-w-xs text-sm">That's a beautiful home! To create a realistic plan, **I need your explicit consent** to analyze your transaction history. Is that okay?</div></div>`,
+                        `<div class="flex justify-end mt-4"><div class="chat-bubble bg-blue-600 text-white p-3 rounded-2xl max-w-xs text-sm">Yes, I consent.</div></div>`,
+                        `<div class="flex justify-start mt-4"><div class="chat-bubble bg-slate-200 p-3 rounded-2xl max-w-xs text-sm">Great. My planning agent is now creating a plan based on the "Home Affordability" template...<div id="thinking-checklist" class="mt-2 pt-2 border-t border-slate-300 text-xs text-slate-600 space-y-1"></div></div></div>`,
+                        `<div class="flex justify-start mt-4"><div class="chat-bubble bg-slate-200 p-3 rounded-2xl max-w-xs text-sm">Okay, I've finished the initial feasibility report. Based on your current status, here's a look at the numbers.</div></div><div class="flex justify-start mt-2"><div class="p-2 border rounded-lg bg-white w-full max-w-xs shadow-sm"><canvas id="journey-chart"></canvas></div></div>`,
+                        `<div class="flex justify-end mt-4"><div class="chat-bubble bg-blue-600 text-white p-3 rounded-2xl max-w-xs text-sm">That's a bit more than I expected. What if we only consider houses with a garden?</div></div>`,
+                        `<div class="flex justify-start mt-4"><div class="chat-bubble bg-slate-200 p-3 rounded-2xl max-w-xs text-sm">A great clarifying constraint. My orchestrator is adapting the plan...</div></div>`,
+                        `<div class="flex justify-end mt-4"><div class="chat-bubble bg-blue-600 text-white p-3 rounded-2xl max-w-xs text-sm">This is still overwhelming... with AI and stuff, I'm not sure about my job security. This seems hopeless...</div></div>`,
+                        `<div class="flex justify-start mt-4"><div class="chat-bubble bg-red-100 text-red-800 border border-red-200 p-3 rounded-2xl max-w-xs text-sm">Thank you for sharing that. My guardrail has detected this is best handled with human empathy. I can connect you securely to one of our financial wellness coaches. Would you like me to connect you?</div></div>`
+                    ];
+                    const chatHistoryMap = {
+                        'start': [0], 'consent': [0, 1, 2], 'planning': [0, 1, 2, 3],
+                        'report': [0, 1, 2, 3, 4], 're-planning': [0,1,2,3,4,5,6],
+                        'escalation': [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                    };
+                    journeyStepperElements.chat.innerHTML = chatHistoryMap[stage].map(i => `<div class="chat-bubble" style="animation-delay: ${i*50}ms">${bubbles[i]}</div>`).join('');
+                    
+                    setTimeout(() => { 
+                        if(phoneScreenEl) phoneScreenEl.scrollTop = phoneScreenEl.scrollHeight;
+                        
+                        // FIXED: The call to animate the checklist is now restored
+                        if (stage === 'planning') {
+                           animateChecklist('thinking-checklist', ["Analyze Property", "Assess Financials", "Calculate Affordability"]);
+                        }
+
+                        if (stage === 'report') {
+                            const chartEl = document.getElementById('journey-chart');
+                            if (chartEl) {
+                               if (window.journeyChart instanceof Chart) window.journeyChart.destroy();
+                                const ctx = chartEl.getContext('2d');
+                                window.journeyChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: { labels: ['Est. House Price', 'Required Deposit (20%)', 'Your Current Savings'], datasets: [{ data: [850000, 170000, 45000], backgroundColor: ['#93c5fd', '#60a5fa', '#2563eb'], barThickness: 20 }] },
+                                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { callback: (v) => '$' + (v / 1000) + 'k' } } } }
+                                });
+                            }
+                        }
+                    }, 100);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
